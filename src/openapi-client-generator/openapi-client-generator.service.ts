@@ -4,6 +4,7 @@ import { spawn } from 'child_process';
 export interface OpenApiClientGeneratorOptions {
   enabled: boolean;
   type: string;
+  openApiToolsFilePath?: string;
   openApiFilePath: string;
   outputFolderPath: string;
   additionalProperties?: string;
@@ -20,7 +21,11 @@ export class OpenApiClientGeneratorService {
 
     await new Promise((resolve, reject) => {
       const command = [
-        `npx openapi-generator-cli generate`,
+        `npx openapi-generator-cli`,
+        options?.openApiToolsFilePath ?
+          `--openapitools=${options.openApiToolsFilePath}`
+          : '',
+        `generate`,
         `-g ${options.type}`,
         `-i \"${options.openApiFilePath}\"`,
         `-o \"${options.outputFolderPath}\"`,
